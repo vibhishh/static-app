@@ -29,5 +29,15 @@ pipeline {
                 }
             }
         }
+       stage('Deploy the code') {
+           steps {
+                script {
+                    // Use DockerHub credentials securely
+                    withCredentials([usernamePassword(credentialsId: 'dockerID', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                      sh 'docker run -d -p 80:80 --name=static-app $DOCKER_USER/static-app:latest'
+                    }
+                }
+           }
+        }
     }
 }
